@@ -1,6 +1,0 @@
-gaps inner 1102
-gaps outer 0
-
- 
-
-# Remove i3wm title bar
