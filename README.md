@@ -14,6 +14,10 @@ For the first time you use this tool, it will make a backup of your current conf
 
 Also, dont edit the **VARIABLES** file, because any value in this tool is belong to that file, even line changed can cause many error
 
+## :cyclone: Dependency
+
+This tool only required `python3` as it's dependency
+
 ## :gear: How to use
 
 Just execute this command
