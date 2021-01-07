@@ -28,9 +28,20 @@ new_window 1pixel"""
 def chgConf():
     ginner = int(input("Gaps inner : "))
     gouter = int(input("Gaps outer : "))
+    smartGaps = input("Smart gaps (y/n) : ")
 
     setConfig(GAPS_INNER_LINE, GAPS_INNER_STRING, ginner)
     setConfig(GAPS_OUTER_LINE, GAPS_OUTER_STRING, gouter)
+
+    if smartGaps == "y":
+        setVariable(SMART_GAPS_LINE, "ON")
+        writeConfig("smart_gaps on")
+    elif smartGaps == "n":
+        setVariable(SMART_GAPS_LINE, "OFF")
+        editConfig("smart_gaps on", "")
+    else:
+        raise
+
     os.system("i3-msg restart >> /dev/null")
 
 
