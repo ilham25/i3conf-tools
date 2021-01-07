@@ -20,7 +20,13 @@ This tool only required `python3` as it's dependency
 
 ## :gear: How to use
 
-Just execute this command
+Clone this repository and change directory
+
+```bash
+git clone https://github.com/ilham25/i3conf-tools.git && cd i3conf-tools
+```
+
+after that execute this command
 
 ```bash
 ./i3conf
