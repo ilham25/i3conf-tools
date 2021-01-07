@@ -233,7 +233,6 @@ bindsym $mod+F12 exec networkmanager_dmenu
 
 gaps inner 6
 gaps outer 0
-
 #smart_gaps on
 
 

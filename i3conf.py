@@ -1,12 +1,17 @@
 #! /usr/bin/env python3
 
-from utils import writeConfig, updateConfig
+from utils.function import *
 from utils.colors import *
+from utils.linevar import *
 
 headText = f"""{BLUE}
 #######################
 ## i3wm Config Tools ##
 #######################{NC}"""
+
+choiceText = f"""{YELLOW}
+1. Remove i3wm Title Bar
+2. Gaps Config{NC}"""
 
 
 def rmTitle():
@@ -26,13 +31,41 @@ def chgConf():
     updateConfig(param, val)
 
 
+def getVar():
+    getVariable(GAPS_OUTER)
+
+
+def setVar():
+    ginner = int(input("Gaps inner : "))
+    gouter = int(input("Gaps outer : "))
+    smartGaps = input("Smart gaps (y/n) : ")
+
+    # print(type(ginner))
+    # print(type(gouter))
+
+    setVariable(GAPS_INNER, ginner)
+    setVariable(GAPS_OUTER, gouter)
+
+    if smartGaps == "y":
+        setVariable(SMART_GAPS, "TRUE")
+    elif smartGaps == "n":
+        setVariable(SMART_GAPS, "FALSE")
+    else:
+        raise
+
+
 options = {
     1: rmTitle,
-    2: chgConf
+    2: chgConf,
+    3: getVar,
+    4: setVar
 }
 
 print(headText)
+print(choiceText)
 choice = input("Choice : ")
+
+backupConfig()
 
 try:
     options[int(choice)]()
