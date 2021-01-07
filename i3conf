@@ -7,25 +7,44 @@ from utils.linevar import *
 headText = f"""{BLUE}
 #######################
 ## i3wm Config Tools ##
-# {NC}"""
+#######################{NC}"""
 
 choiceText = f"""{YELLOW}
 1. Remove i3wm Title Bar
-2. Gaps Config{NC}"""
+2. Gaps Config
+3. Load Default{NC}"""
 
 
 def rmTitle():
+
+    print(f"{BLUE}Removing title bar...{NC}")
+
+    isRemoved = getVariable(TITLE_REMOVED_LINE)
+
+    # Remove title bar config, maybe look ugly but it is what it is :>
     rmBorder = """
-###########################
 ## Remove i3wm Title Bar ##
-###########################
-for_window [class=\"^ .*\"] border pixel 0
+for_window [class=\"^.*\"] border pixel 0
 new_window 1pixel"""
 
-    writeConfig(rmBorder)
+    for [param, value] in isRemoved.items():
+        if not value == "TRUE":
+            writeConfig(rmBorder)
+            setVariable(TITLE_REMOVED_LINE, "TRUE")
+        else:
+            # Default title bar config
+            editConfig("## Remove i3wm Title Bar ##", "")
+            editConfig("for_window [class=\"^.*\"] border pixel 0", "")
+            editConfig("new_window 1pixel", "")
+            setVariable(TITLE_REMOVED_LINE, "FALSE")
+
+    print(f"{GREEN}Title bar removed sucessfully!{NC}")
+    os.system("i3-msg restart >> /dev/null")
 
 
-def chgConf():
+def gapsConf():
+    print(f"{BLUE}Gaps Configuration{NC}")
+
     ginner = int(input("Gaps inner : "))
     gouter = int(input("Gaps outer : "))
     smartGaps = input("Smart gaps (y/n) : ")
@@ -45,38 +64,15 @@ def chgConf():
     os.system("i3-msg restart >> /dev/null")
 
 
-def getVar():
-    target = getVariable(SMART_GAPS_LINE)
-    for [param, value] in target.items():
-        if not value == "ON":
-            print("smart gaps off")
-
-
-def setVar():
-    ginner = int(input("Gaps inner : "))
-    gouter = int(input("Gaps outer : "))
-    smartGaps = input("Smart gaps (y/n) : ")
-
-    setVariable(GAPS_INNER_LINE, ginner)
-    setVariable(GAPS_OUTER_LINE, gouter)
-
-    if smartGaps == "y":
-        setVariable(SMART_GAPS_LINE, "ON")
-    elif smartGaps == "n":
-        setVariable(SMART_GAPS_LINE, "OFF")
-        # target = getVariable(SMART_GAPS_LINE)
-        # for [param, value] in target.items():
-        #     if not value == "ON":
-        #         print("smart gaps off")
-    else:
-        raise
+def loadDefault():
+    defaultConfig()
+    os.system("i3-msg restart >> /dev/null")
 
 
 options = {
     1: rmTitle,
-    2: chgConf,
-    3: getVar,
-    4: setVar
+    2: gapsConf,
+    3: loadDefault,
 }
 
 print(headText)

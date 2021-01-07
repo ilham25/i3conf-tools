@@ -4,7 +4,7 @@ import getpass
 import subprocess
 from shutil import copyfile
 from .colors import *
-
+from .linevar import *
 # Get current username and set path to user home directory
 username = getpass.getuser()
 wmPath = f'/home/{username}/.config/i3/'
@@ -15,11 +15,41 @@ configPath = os.path.join(wmPath, fileName)
 configPath_debug = fileName
 
 
+def defaultConfig():
+
+    # Default gaps config
+
+    # Remove any gaps before load default gaps value (0)
+    setVariable(GAPS_INNER_LINE, 0)
+    setVariable(GAPS_OUTER_LINE, 0)
+    for i in range(100):
+        editConfig(f"{GAPS_INNER_STRING} {str(i)}", "")
+        editConfig(f"{GAPS_OUTER_STRING} {str(i)}", "")
+
+    editConfig(SMART_GAPS_STRING, "")
+    editConfig("## Gaps ##", "")
+    # Load gaps default value (0)
+    gapsConf = f"""
+## Gaps ##
+gaps inner 0
+gaps outer 0
+    """
+    writeConfig(gapsConf)
+
+    # Default title bar config
+    editConfig("## Remove i3wm Title Bar ##", "")
+    editConfig("for_window [class=\"^.*\"] border pixel 0", "")
+    editConfig("new_window 1pixel", "")
+
+
 def backupConfig():
     print(f"{YELLOW}Checking file backup...{NC}")
     if not os.path.isfile(configPath + ".bak"):
         print(f"{YELLOW}Backup file not found, creating {GREEN}{fileName}.bak{NC}")
         copyfile(configPath, configPath + ".bak")
+
+        print(f"{YELLOW}Load default config...{NC}")
+        defaultConfig()
     else:
         print(f"{GREEN}Found backup file, continue...{NC}")
 
@@ -152,7 +182,7 @@ def setVariable(line, newVal):
 def editConfig(string, newString):
     with open(configPath, 'rt') as fin:
         data = fin.read()
-        data = data.replace(string, newString)
+        data = data.replace(string, newString + "\n")
     with open(configPath, 'wt') as fout:
         fout.write(data)
 

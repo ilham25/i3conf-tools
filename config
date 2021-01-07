@@ -229,15 +229,6 @@ bindsym $mod+F12 exec networkmanager_dmenu
 
 
 
-## GAPS ##
-
-gaps inner 6
-gaps outer 0
-
-#smart_gaps on
-
-
-
 ## VOLUME CHANGE HANDLE [VOLUME BUTTON] ##
 
 bindsym XF86AudioRaiseVolume exec bash -c '~/.scripts/notify/change-volume up'
