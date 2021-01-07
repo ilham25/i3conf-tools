@@ -7,7 +7,7 @@ from utils.linevar import *
 headText = f"""{BLUE}
 #######################
 ## i3wm Config Tools ##
-#######################{NC}"""
+# {NC}"""
 
 choiceText = f"""{YELLOW}
 1. Remove i3wm Title Bar
@@ -26,13 +26,19 @@ new_window 1pixel"""
 
 
 def chgConf():
-    param = input("Parameter : ")
-    val = int(input("Value : "))
-    updateConfig(param, val)
+    ginner = int(input("Gaps inner : "))
+    gouter = int(input("Gaps outer : "))
+
+    setConfig(GAPS_INNER_LINE, GAPS_INNER_STRING, ginner)
+    setConfig(GAPS_OUTER_LINE, GAPS_OUTER_STRING, gouter)
+    os.system("i3-msg restart >> /dev/null")
 
 
 def getVar():
-    getVariable(GAPS_OUTER)
+    target = getVariable(SMART_GAPS_LINE)
+    for [param, value] in target.items():
+        if not value == "ON":
+            print("smart gaps off")
 
 
 def setVar():
@@ -40,16 +46,17 @@ def setVar():
     gouter = int(input("Gaps outer : "))
     smartGaps = input("Smart gaps (y/n) : ")
 
-    # print(type(ginner))
-    # print(type(gouter))
-
-    setVariable(GAPS_INNER, ginner)
-    setVariable(GAPS_OUTER, gouter)
+    setVariable(GAPS_INNER_LINE, ginner)
+    setVariable(GAPS_OUTER_LINE, gouter)
 
     if smartGaps == "y":
-        setVariable(SMART_GAPS, "TRUE")
+        setVariable(SMART_GAPS_LINE, "ON")
     elif smartGaps == "n":
-        setVariable(SMART_GAPS, "FALSE")
+        setVariable(SMART_GAPS_LINE, "OFF")
+        # target = getVariable(SMART_GAPS_LINE)
+        # for [param, value] in target.items():
+        #     if not value == "ON":
+        #         print("smart gaps off")
     else:
         raise
 

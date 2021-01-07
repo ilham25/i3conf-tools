@@ -86,8 +86,31 @@ def updateConfig(param, newValue):
 
 def getVariable(line):
     with open("VARIABLES") as var:
-        configLine = var.readlines()
-        print(configLine[line - 1])
+        # Variables as dictionary
+        paramSplit = {}
+
+        # Separator
+        separator = '='
+
+        # Read line based on line arguments
+        configLine = var.readlines()[line - 1]
+
+        # Split parameter and it's value by '='
+        splitted = configLine.split(separator)
+
+        try:
+            # Get only value from parameter
+            value = splitted.pop(-1)
+
+            # Get only parameter without value
+            param = separator.join(splitted)
+
+            # Insert parameter and it's value separately
+            paramSplit[param] = int(value)
+        except:
+            paramSplit[param] = str(value).rstrip("\n")
+
+    return paramSplit
 
 
 def setVariable(line, newVal):
@@ -124,3 +147,20 @@ def setVariable(line, newVal):
             data = data.replace(configLine, nline + "\n")
         with open("VARIABLES", 'wt') as fout:
             fout.write(data)
+
+
+def editConfig(string, newString):
+    with open(configPath, 'rt') as fin:
+        data = fin.read()
+        data = data.replace(string, newString)
+    with open(configPath, 'wt') as fout:
+        fout.write(data)
+
+
+def setConfig(line, paramString, newVal):
+
+    target = getVariable(line)
+    setVariable(line, newVal)
+
+    for [param, value] in target.items():
+        editConfig(f"{paramString} {value}", f"{paramString} {newVal}")
